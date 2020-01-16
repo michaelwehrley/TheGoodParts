@@ -61,10 +61,20 @@ function liftf(bfn) {
   return function(x) {
     return function(y) {
       return bfn(x, y);
-    }
+    } 
   }
 }
 
 var addf = liftf(add);
-log(addf(3)(4)) // 7
-log(liftf(mul)(5)(6)) // 30
+addf(3)(4) // 7
+liftf(mul)(5)(6) // 30
+
+function curry(fn, x) {
+  return function (y) {
+    return fn(x, y)
+  }
+}
+
+var add3 = curry(add, 3);
+log(add3(4)); // 7
+log(curry(mul, 5)(6)); // 30
