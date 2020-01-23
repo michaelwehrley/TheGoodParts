@@ -76,5 +76,28 @@ function curry(fn, x) {
 }
 
 var add3 = curry(add, 3);
-log(add3(4)); // 7
-log(curry(mul, 5)(6)); // 30
+add3(4); // 7
+curry(mul, 5)(6); // 30
+
+var inc = curry(add, 1);
+inc(5);  // 6
+inc(inc(5));  // 7
+
+var inc = liftf(add)(1)
+inc(5) // 6
+
+var inc = addf(1)
+inc(5) // 6
+
+function twice(fn) {
+  return function (x) {
+    return fn(x, x);
+  }
+}
+
+add(11, 11) // 22
+var doubl = twice(add);
+log(doubl(11)); // 22
+var square = twice(mul);
+log(square(11)); // 121
+
