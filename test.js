@@ -89,4 +89,12 @@ function composeu(firstFn, secondFn) {
   }
 }
 
-log(composeu(doubl, square)(5)) // 100
+composeu(doubl, square)(5); // 100
+
+function composeb(firstFn, secondFn) {
+  return function(x, y, z) {
+    return secondFn(firstFn(x, y), z);
+  }
+}
+
+log(composeb(add, mul)(2, 3, 7)); // 35
