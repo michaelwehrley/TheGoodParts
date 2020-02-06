@@ -1,7 +1,9 @@
+// Used to display answers to the screen in the index.html
 function log(arg) {
   document.writeln(arg)
 }
 
+// Functions you will need...
 function identity(id) {
   return id;
 }
