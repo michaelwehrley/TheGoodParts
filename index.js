@@ -99,4 +99,41 @@ function composeb(firstFn, secondFn) {
   }
 }
 
-log(composeb(add, mul)(2, 3, 7)); // 35
+composeb(add, mul)(2, 3, 7); // 35
+
+function limit(fn, limit) {
+  var count = 0;
+
+  return function(a, b) {
+    if (count < limit) {
+      count++;
+      return fn(a, b);
+    }
+    return undefined; // To be explicit (self documenting code)
+  }
+};
+
+var add_ltd = limit(add, 1);
+
+add_ltd(3, 4); // 7
+add_ltd(3, 5); // undefined
+
+function _from(start) {
+  return function() {
+    var next = start;
+    start += 1;
+
+    return next;
+  }
+}
+
+function from(initial) {
+  return function() {
+    return initial++;
+  }
+}
+
+var index = from(0);
+index(); // 0
+index(); // 1
+index(); // 2
