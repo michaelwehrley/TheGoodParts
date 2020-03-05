@@ -171,8 +171,21 @@ log(ele()) // 'b'
 log(ele()) // 'c'
 log(ele()) // undefined
 
-function element(list, gen) {
+function _element(list, gen) {
   return function() {
     return list[gen()];
+  }
+}
+
+function element(list, gen) {
+  var index;
+
+  return function() {
+    index = gen();
+    if (index !== undefined) {
+      return list[index];
+    } else {
+      return undefined;
+    }
   }
 }
