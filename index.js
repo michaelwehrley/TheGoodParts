@@ -149,6 +149,17 @@ function to(generator, limit) {
 }
 
 var index = to(from(1), 3);
-index() // 1
-index() // 2
-index() // undefined
+index(); // 1
+index(); // 2
+index(); // undefined
+
+function fromTo(start, end) {
+  return to(from(start), end);
+}
+
+var index = fromTo(0, 3);
+
+index(); // 0
+index(); // 1
+index(); // 2
+index(); // undefined
