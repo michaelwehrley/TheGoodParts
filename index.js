@@ -225,3 +225,22 @@ function element(array, gen) {
     }
   }
 }
+
+var array = [], col = collect(fromTo(0, 2), array);
+
+log(col()) // 0
+log(col()) // 1
+log(col()) // undefined
+log(array) // [0, 1]
+
+function collect(gen, array) {
+  var value;
+
+  return function() {
+    value = gen();
+    if (value !== undefined) {
+      array.push(value);
+    }
+    return value;
+  }
+}
