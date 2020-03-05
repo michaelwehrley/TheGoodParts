@@ -165,13 +165,13 @@ index(); // 1
 index(); // 2
 index(); // undefined
 
-var ele = element(['a', 'b', 'c', 'd'], fromTo(1, 3));
+var ele = __element(['a', 'b', 'c', 'd'], fromTo(1, 3));
 
-log(ele()) // 'b'
-log(ele()) // 'c'
-log(ele()) // undefined
+ele(); // 'b'
+ele(); // 'c'
+ele(); // undefined
 
-function _element(list, gen) {
+function __element(list, gen) {
   return function() {
     // accidently works b/c UNLESS someone creates
     // an `undefined` property on the array
@@ -180,13 +180,42 @@ function _element(list, gen) {
   }
 }
 
-function element(list, gen) {
+var ele = _element(['a', 'b', 'c', 'd'], fromTo(1, 3));
+
+ele(); // 'b'
+ele(); // 'c'
+ele(); // undefined
+
+function _element(list, gen) {
   var index;
 
   return function() {
     index = gen();
     if (index !== undefined) {
       return list[index];
+    } else {
+      return undefined;
+    }
+  }
+}
+
+var ele = element(['a', 'b', 'c', 'd']);
+
+log(ele()); // 'b'
+log(ele()); // 'c'
+log(ele()); // 'b'
+log(ele()); // 'c'
+log(ele()); // undefined
+
+function element(array, gen) {
+  // First rule of functional programming, let the functions do the work. - DC
+  var index;
+  var gen = gen || fromTo(0, array.length);
+
+  return function() {
+    index = gen();
+    if (index !== undefined) {
+      return array[index];
     } else {
       return undefined;
     }
