@@ -154,6 +154,7 @@ index(); // 2
 index(); // undefined
 
 function fromTo(start, end) {
+  // First rule of functional programming, let the functions do the work. - DC
   return to(from(start), end);
 }
 
@@ -163,3 +164,15 @@ index(); // 0
 index(); // 1
 index(); // 2
 index(); // undefined
+
+var ele = element(['a', 'b', 'c', 'd'], fromTo(1, 3));
+
+log(ele()) // 'b'
+log(ele()) // 'c'
+log(ele()) // undefined
+
+function element(list, gen) {
+  return function() {
+    return list[gen()];
+  }
+}
