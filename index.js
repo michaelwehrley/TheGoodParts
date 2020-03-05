@@ -137,3 +137,18 @@ var index = from(0);
 index(); // 0
 index(); // 1
 index(); // 2
+
+function to(generator, limit) {
+  return function() {
+    value = generator();
+    if (value < limit) {
+      return value;
+    }
+    return undefined; // Crockford <3 this!
+  }
+}
+
+var index = to(from(1), 3);
+index() // 1
+index() // 2
+index() // undefined
