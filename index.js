@@ -201,16 +201,20 @@ function _element(list, gen) {
 
 var ele = element(['a', 'b', 'c', 'd']);
 
-log(ele()); // 'b'
-log(ele()); // 'c'
-log(ele()); // 'b'
-log(ele()); // 'c'
-log(ele()); // undefined
+ele(); // 'b'
+ele(); // 'c'
+ele(); // 'b'
+ele(); // 'c'
+ele(); // undefined
 
 function element(array, gen) {
   // First rule of functional programming, let the functions do the work. - DC
   var index;
-  var gen = gen || fromTo(0, array.length);
+  // var gen = gen || fromTo(0, array.length);
+  // Be explicit about the world:
+  if (gen === undefined) {
+    gen = fromTo(0, array.length)
+  }
 
   return function() {
     index = gen();
