@@ -173,6 +173,9 @@ log(ele()) // undefined
 
 function _element(list, gen) {
   return function() {
+    // accidently works b/c UNLESS someone creates
+    // an `undefined` property on the array
+    // i.e., list.undefined = 5;
     return list[gen()];
   }
 }
