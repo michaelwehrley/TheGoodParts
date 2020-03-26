@@ -207,11 +207,10 @@ ele(); // 'b'
 ele(); // 'c'
 ele(); // undefined
 
+// First rule of functional programming, let the functions do the work. - DC
 function element(array, gen) {
-  // First rule of functional programming, let the functions do the work. - DC
   var index;
-  // var gen = gen || fromTo(0, array.length);
-  // Be explicit about the world:
+  // Be explicit about the world: var gen = gen || fromTo(0, array.length);
   if (gen === undefined) {
     gen = fromTo(0, array.length)
   }
@@ -228,10 +227,10 @@ function element(array, gen) {
 
 var array = [], col = collect(fromTo(0, 2), array);
 
-log(col()) // 0
-log(col()) // 1
-log(col()) // undefined
-log(array) // [0, 1]
+col(); // 0
+col(); // 1
+col(); // undefined
+array; // [0, 1]
 
 function collect(gen, array) {
   var value;
@@ -242,5 +241,43 @@ function collect(gen, array) {
       array.push(value);
     }
     return value;
+  }
+}
+
+var fil = filter(fromTo(0, 5), function third(value) {
+  return (value % 3) === 0;
+});
+
+log(fil()) // 0
+log(fil()) // 3
+log(fil()) // undefined
+
+function _filter(gen, predicate) {
+  var value;
+
+  return function() {
+    do {
+      value = gen();
+    } while (
+      value !== undefined &&
+      !predicate(value)
+    );
+    return value;
+  }
+}
+
+// Tail call optimization (TCO): In *ES6* it is possible
+// to call a function from another function (i.e., recursion) without growing the call stack.
+// https://hackernoon.com/es6-tail-call-optimization-43f545d2f68b
+function filter(gen, predicate) {
+  var value;
+
+  return function recur() {
+    value = gen();
+
+    if (value === undefined || predicate(value)) {
+      return value;
+    }
+    return recur();
   }
 }
