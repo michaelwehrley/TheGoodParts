@@ -248,9 +248,9 @@ var fil = filter(fromTo(0, 5), function third(value) {
   return (value % 3) === 0;
 });
 
-log(fil()) // 0
-log(fil()) // 3
-log(fil()) // undefined
+fil() // 0
+fil() // 3
+fil() // undefined
 
 function _filter(gen, predicate) {
   var value;
@@ -279,5 +279,29 @@ function filter(gen, predicate) {
       return value;
     }
     return recur();
+  }
+}
+
+var con = conact(fromTo(0, 3), fromTo(0, 2));
+
+log(con()); // 0
+log(con()); // 1
+log(con()); // 2
+log(con()); // 0
+log(con()); // 1
+log(con()); // undefined
+
+function conact(fn1, fn2) {
+  var value;
+
+  return function() {
+    value = fn1();
+    if (value !== undefined) {
+      return value;
+    }
+    value = fn2();
+    if (value !== undefined) {
+      return value;
+    }
   }
 }
