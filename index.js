@@ -284,14 +284,14 @@ function filter(gen, predicate) {
 
 var con = conact(fromTo(0, 3), fromTo(0, 2));
 
-log(con()); // 0
-log(con()); // 1
-log(con()); // 2
-log(con()); // 0
-log(con()); // 1
-log(con()); // undefined
+con(); // 0
+con(); // 1
+con(); // 2
+con(); // 0
+con(); // 1
+con(); // undefined
 
-function conact(fn1, fn2) {
+function _conact(fn1, fn2) {
   var value;
 
   return function() {
@@ -305,3 +305,15 @@ function conact(fn1, fn2) {
     }
   }
 }
+
+function concat(gen1, gen2) {
+  return function() {
+    value = gen1();
+    if (value === undefined) {
+      return gen2();
+    } else {
+      return value;
+    }
+  }
+}
+
