@@ -1,3 +1,5 @@
+"use strict";
+
 // Used to display answers to the screen in the index.html
 function log(arg) {
   document.writeln(arg)
@@ -140,7 +142,7 @@ index(); // 2
 
 function to(generator, limit) {
   return function() {
-    value = generator();
+    var value = generator();
     if (value < limit) {
       return value;
     }
@@ -282,7 +284,7 @@ function filter(gen, predicate) {
   }
 }
 
-var con = conact(fromTo(0, 3), fromTo(0, 2));
+var con = concat(fromTo(0, 3), fromTo(0, 2));
 
 con(); // 0
 con(); // 1
@@ -291,7 +293,7 @@ con(); // 0
 con(); // 1
 con(); // undefined
 
-function _conact(fn1, fn2) {
+function _concat(fn1, fn2) {
   var value;
 
   return function() {
@@ -308,7 +310,7 @@ function _conact(fn1, fn2) {
 
 function concat(gen1, gen2) {
   return function() {
-    value = gen1();
+    var value = gen1();
     if (value === undefined) {
       return gen2();
     } else {
@@ -317,3 +319,27 @@ function concat(gen1, gen2) {
   }
 }
 
+var geng = gensymf("G");
+var genh = gensymf("H");
+
+log(geng()) // "G1"
+log(genh()) // "H1"
+log(geng()) // "G2"
+log(genh()) // "H2"
+
+function _gensymf(value) {
+  var index = 0;
+
+  return function() {
+    index++;
+    return value + index
+  }
+}
+
+function gensymf(value) {
+  var index = from(1);
+
+  return function() {
+    return value + index();
+  }
+}
