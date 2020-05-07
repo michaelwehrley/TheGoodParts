@@ -322,10 +322,10 @@ function concat(gen1, gen2) {
 var geng = gensymf("G");
 var genh = gensymf("H");
 
-log(geng()) // "G1"
-log(genh()) // "H1"
-log(geng()) // "G2"
-log(genh()) // "H2"
+geng(); // "G1"
+genh(); // "H1"
+geng(); // "G2"
+genh(); // "H2"
 
 function _gensymf(value) {
   var index = 0;
@@ -341,5 +341,26 @@ function gensymf(value) {
 
   return function() {
     return value + index();
+  }
+}
+
+var fib = fibonaccif(0, 1);
+
+log(fib()); // 0
+log(fib()); // 1
+log(fib()); // 1
+log(fib()); // 2
+log(fib()); // 3
+log(fib()); // 5
+
+function fibonaccif(initial, next) {
+  var previous;
+
+  return function() {
+    previous = initial;
+    initial = next;
+    next = add(previous, next);
+
+    return previous;
   }
 }
