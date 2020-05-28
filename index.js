@@ -346,12 +346,12 @@ function gensymf(value) {
 
 var fib = fibonaccif(0, 1);
 
-log(fib()); // 0
-log(fib()); // 1
-log(fib()); // 1
-log(fib()); // 2
-log(fib()); // 3
-log(fib()); // 5
+fib(); // 0
+fib(); // 1
+fib(); // 1
+fib(); // 2
+fib(); // 3
+fib(); // 5
 
 function fibonaccif(initial, next) {
   var previous;
@@ -364,3 +364,60 @@ function fibonaccif(initial, next) {
     return previous;
   }
 }
+
+function counter(initial) {
+  return {
+    down: function() {
+      return initial -= 1;
+    },
+    up: function() {
+      return initial += 1;
+    }
+  };
+}
+
+var object = counter(10),
+    up = object.up,
+    down = object.down;
+
+up(); // 11
+down(); // 10
+down(); // 9
+up(); // 10
+
+function revocable(fn) {
+  return {
+    invoke: function(a, b) {
+      if (fn !== undefined) {
+        return fn(a, b);
+      }
+    },
+    revoke: function() {
+      fn = undefined;
+    }
+  }
+}
+
+var rev = revocable(add),
+    add_rev = rev.invoke;
+
+add_rev(3, 4); // 7
+rev.revoke();
+add_rev(5, 7); // undefined
+
+function m(value, source) {
+  return {
+    value: value,
+    source: (typeof source === 'string' ) ? source : String(value)
+  };
+}
+
+JSON.stringify(m(1));
+JSON.stringify(m(Math.PI, 'pi'));
+
+function addm(option1, option2) {
+  return JSON.stringify(m(option1.value + option2.value, '(' + option1.source + '+' + option2.source + ')'));
+}
+
+log(addm(m(3), m(4))); // { "value": 7, "source": "(3+4)" }
+log(addm(m(1), m(Math.PI, 'pi'))); // { "value": 4.14159, "source": "(1+pi)" }
