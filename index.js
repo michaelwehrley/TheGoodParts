@@ -415,9 +415,40 @@ function m(value, source) {
 JSON.stringify(m(1));
 JSON.stringify(m(Math.PI, 'pi'));
 
+addm(m(3), m(4)); // { "value": 7, "source": "(3+4)" }
+addm(m(1), m(Math.PI, 'pi')); // { "value": 4.14159, "source": "(1+pi)" }
+
 function addm(option1, option2) {
   return JSON.stringify(m(option1.value + option2.value, '(' + option1.source + '+' + option2.source + ')'));
 }
 
-log(addm(m(3), m(4))); // { "value": 7, "source": "(3+4)" }
-log(addm(m(1), m(Math.PI, 'pi'))); // { "value": 4.14159, "source": "(1+pi)" }
+var addm = liftm1(add, "+");
+JSON.stringify(addm(m(3), m(4))); // { "value": 7, "source": "(3+4)" }
+
+var addm = liftm1(mul, "*");
+JSON.stringify(addm(m(3), m(4))); // { "value": 7, "source": "(3+4)" }
+
+function liftm1(binary, operation) {
+  return function(option1, option2) {
+    return JSON.stringify(m(binary(option1.value, option2.value), '(' + option1.source + operation + option2.source + ')'));
+  }
+}
+
+function liftm(binary, operation) {
+  return function(option1, option2) {
+    if (typeof option1 === 'number') {
+      option1 = m(option1);
+    }
+
+    if (typeof option2 === 'number') {
+      option2 = m(option2);
+    }
+
+    return JSON.stringify(m(binary(option1.value, option2.value), '(' + option1.source + operation + option2.source + ')'));
+  }
+}
+
+var addm = liftm(add, "+");
+log(JSON.stringify(addm(3, 4))); // { "value": 7, "source": "(3+4)" }
+
+
