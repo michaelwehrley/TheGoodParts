@@ -449,6 +449,52 @@ function liftm(binary, operation) {
 }
 
 var addm = liftm(add, "+");
-log(JSON.stringify(addm(3, 4))); // { "value": 7, "source": "(3+4)" }
+JSON.stringify(addm(3, 4)); // { "value": 7, "source": "(3+4)" }
 
+// Simple Array Expressions
 
+// var sae = [mul, 5, 11];
+// exp(sae); // 55
+// exp(42); // 42
+
+function exp2(value) {
+  if (Array.isArray(value)) {
+    return value[0](value[1], value[2]);
+  } else {
+    return value;
+  }
+}
+
+function exp(value) {
+  if (Array.isArray(value)) {
+    return value[0](exp(value[1]), exp(value[2]));
+  } else {
+    return value;
+  }
+}
+
+// var sae = [mul, 5, 11];
+// exp(sae); // 55
+// exp(42); // 42
+var nae = [Math.sqrt, [add, [square, 5], [square, 11]]];
+exp(nae); // 5
+
+function addg(value) {
+  var sum;
+
+  function foo(value) {
+    if (value === undefined) return sum;
+
+    sum = sum || 0;
+    sum += value
+    return foo;
+  }
+
+  return foo(value);
+}
+
+log(addg()) // undefined
+log(addg(2)()) // 2
+log(addg(2)(7)()) // 9
+log(addg(3)(0)(4)()) // 7
+log(addg(1)(2)(4)(8)()) // 15
