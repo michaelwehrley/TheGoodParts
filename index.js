@@ -479,7 +479,7 @@ function exp(value) {
 var nae = [Math.sqrt, [add, [square, 5], [square, 11]]];
 exp(nae); // 5
 
-function addg(value) {
+function _addg(value) {
   var sum;
 
   function foo(value) {
@@ -491,6 +491,21 @@ function addg(value) {
   }
 
   return foo(value);
+}
+
+function addg(first) {
+  function more(next) {
+    if (next === undefined) {
+      return first;
+    }
+
+    first += next
+    return more;
+  }
+
+  if (first !== undefined) {
+    return more;
+  }
 }
 
 log(addg()) // undefined
