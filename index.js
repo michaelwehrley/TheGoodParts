@@ -508,8 +508,34 @@ function addg(first) {
   }
 }
 
-log(addg()) // undefined
-log(addg(2)()) // 2
-log(addg(2)(7)()) // 9
-log(addg(3)(0)(4)()) // 7
-log(addg(1)(2)(4)(8)()) // 15
+addg() // undefined
+addg(2)() // 2
+addg(2)(7)() // 9
+addg(3)(0)(4)() // 7
+addg(1)(2)(4)(8)() // 15
+
+function liftg(fn) {
+  var product;
+
+  function foo(value) {
+    if (value === undefined) {
+      // don't return a function if it isn't going to be invonked again.
+      return product;
+    }
+    if (product === undefined) {
+      product = value;
+      return foo;
+    }
+
+    product = fn(product, value)
+    return foo;
+  }
+
+  return foo;
+}
+
+log(liftg(mul)()) // undefined
+log(liftg(mul)(3)()) // 3
+log(liftg(mul)(3)(0)(4)()) // 0
+log(liftg(mul)(1)(2)(4)(8)()) // 64
+
