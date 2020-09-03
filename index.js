@@ -514,7 +514,7 @@ addg(2)(7)() // 9
 addg(3)(0)(4)() // 7
 addg(1)(2)(4)(8)() // 15
 
-function liftg(fn) {
+function _liftg(binary) {
   var product;
 
   function foo(value) {
@@ -527,15 +527,60 @@ function liftg(fn) {
       return foo;
     }
 
-    product = fn(product, value)
+    product = binary(product, value)
     return foo;
   }
 
   return foo;
 }
 
-log(liftg(mul)()) // undefined
-log(liftg(mul)(3)()) // 3
-log(liftg(mul)(3)(0)(4)()) // 0
-log(liftg(mul)(1)(2)(4)(8)()) // 64
+function liftg(binary) {
+  return function (first) {
+    if (first === undefined) {
+      // don't return a function if it isn't going to be invonked again.
+      return first;
+    }
 
+    return function more(next) {
+      if (next === undefined) {
+        return first;
+      }
+      first = binary(first, next);
+      return more;
+    }
+  }
+}
+
+liftg(mul)() // undefined
+liftg(mul)(3)() // 3
+liftg(mul)(3)(0)(4)() // 0
+liftg(mul)(1)(2)(4)(8)() // 64
+
+function arrayg(first) {
+  var array = [];
+
+  function more(next) {
+    if (next === undefined) {
+      return array;
+    }
+    array.push(next)
+    return more;
+  }
+
+  return more(first); // includes first/base case!  WOW!
+}
+
+arrayg(); // []
+arrayg(3)(); // [3]
+arrayg(3)(4)(5)(); // [3, 4, 5]
+
+// use liftg! 
+
+function continuize(unary) {
+  return function(callbar, arg) {
+    return callbar(unary(arg));
+  }
+}
+
+var sqrtc = continuize(Math.sqrt);
+sqrtc(alert, 81) // alert(81)
